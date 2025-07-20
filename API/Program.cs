@@ -1,5 +1,9 @@
+using Application.Activities.Queries;
+using Application.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Persistence;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +13,13 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(opts =>{
     opts.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddMediatR(x =>{
+    x.RegisterServicesFromAssemblyContaining<GetActivitiesList>();
+});
+
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
 
 builder.Services.AddCors();
 
