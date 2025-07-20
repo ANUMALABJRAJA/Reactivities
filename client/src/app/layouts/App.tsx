@@ -1,56 +1,14 @@
-import { Box, Container, CssBaseline, Typography } from "@mui/material";
-import { useState } from "react"
+import { Box, Container, CssBaseline } from "@mui/material";
 import NavBar from "./NavBar";
-import ActivityDashboard from "../../features/Activities/Dashboard/ActivityDashboard";
-import { useActivities } from "../../lib/hooks/useActivities";
+import { Outlet } from "react-router";
 function App() {
-  const [selectedActivity, SetSelectedActivity] = useState<Activity | undefined>(undefined);
-  const [editMode, SetEditMode] = useState(false);
-
-  const {activities,isPending } = useActivities();
-
-  const handleSelectActivity = (id: string) => {
-    SetSelectedActivity(activities!.find(x => x.id === id));
-  }
-
-  const handleOpenForm = (id?: string) => {
-    if (id) handleSelectActivity(id);
-    else handleCancelSelectActivity();
-    SetEditMode(true);
-  }
-
-  const handleFormClose = () => {
-    SetEditMode(false);
-  }
-
-
-  const handleCancelSelectActivity = () => {
-    SetSelectedActivity(undefined);
-  }
-
- 
-
 
   return (
-    <Box sx={{ bgcolor: '#eeeeee', minHeight:'100vh' }}>
+    <Box sx={{ bgcolor: '#eeeeee', minHeight: '100vh' }}>
       <CssBaseline />
-      <NavBar openForm={handleOpenForm} />
+      <NavBar />
       <Container maxWidth='xl' sx={{ mt: 3 }}>
-        {!activities || isPending ?
-          (<Typography>Loading....</Typography>) : (
-            <ActivityDashboard
-              activities={activities}
-              selectActivity={handleSelectActivity}
-              cancelSelectActivity={handleCancelSelectActivity}
-              selectedActivity={selectedActivity}
-              editMode={editMode}
-              openForm={handleOpenForm}
-              closeForm={handleFormClose}
-              
-            />
-          )
-        }
-
+        <Outlet/>
       </Container>
 
     </Box>
