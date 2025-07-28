@@ -3,8 +3,8 @@ import { useParams } from "react-router";
 import { useActivities } from "../../../lib/hooks/useActivities";
 import ActivityDetailsInfo from "./ActivityDetailsInfo";
 import ActivityDetailsHeader from "./ActivityDetailsHeader";
-import ActivityDetailsSideBar from "./ActivityDetailsSideBar";
 import ActivityDetailsChat from "./ActivityDetailsChat";
+import ActivityDetailsSideBar from "./ActivityDetailsSidebar";
 
 
 
@@ -22,7 +22,7 @@ export default function ActivityDetailsPage() {
                 <ActivityDetailsChat/>
             </Grid2>
             <Grid2 size={4}>
-                <ActivityDetailsSideBar/>
+                <ActivityDetailsSideBar activity={activity} />
             </Grid2>
         </Grid2>
   )

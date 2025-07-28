@@ -17,7 +17,16 @@ export const useActivities = (id?:string) => {
             return response.data;
         },
         //staleTime:1000 * 60 *5
-        enabled : !id && localtion.pathname === '/activities' && !!currentUser
+        enabled : !id && localtion.pathname === '/activities' && !!currentUser,
+        select : data =>{
+            data.map(activity =>{
+                return {
+                    ...activity,
+                    isHost: currentUser?.id == activity.hostId,
+                    isGoing : activity.attendees.some(x => x.id === currentUser?.id)
+                }
+            })
+        }
     })
 
     const { data: activity, isLoading:isLoadingActivity } = useQuery({
@@ -26,7 +35,14 @@ export const useActivities = (id?:string) => {
             const response = await agent.get<Activity>(`/activities/${id}`);
             return response.data;
         },
-        enabled: !!id && !!currentUser
+        enabled: !!id && !!currentUser,
+        select: data =>{
+            return{
+                ...data,
+                isHost: currentUser?.id == data.hostId,
+                isGoing : data.attendees.some(x => x.id === currentUser?.id)
+            }
+        }
     })
 
 
@@ -64,9 +80,29 @@ export const useActivities = (id?:string) => {
         }
     })
 
+    const updateAttendance = useMutation({
+        mutationFn: async(id:string)=>{
+            await agent.post(`/activities/${id}/attend`)
+        },
+        onSuccess: async()=>{
+            await queryClient.invalidateQueries({
+                queryKey:['activities', id]
+            })
+        }
+    })
 
 
-    return {activities,isLoading,updateActivity,createActivity,deleteActivity,activity,isLoadingActivity}
+
+    return {
+            activities,
+            isLoading,
+            updateActivity,
+            createActivity,
+            deleteActivity,
+            activity,
+            isLoadingActivity,
+            updateAttendance
+        }
 
 
 }
