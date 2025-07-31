@@ -68,3 +68,12 @@ type Profile = {
     displayName:string,
     imageUrl?:string
   }
+
+type ChatComment = {
+  id:string
+  createdAt : string
+  body : string
+  userId : string
+  displayName :string
+  imageUrl?: string
+} 
